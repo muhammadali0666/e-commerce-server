@@ -3,9 +3,9 @@ const dotenv = require("dotenv")
 
 dotenv.config()
 
-const sequelize = new Sequelize.config({
+const sequelize = new Sequelize({
   username: "postgres",
-  database: "e-commerce_db",
+  database: "ecommerce_db",
   password: process.env.PASSWORD,
   port: 5432,
   host: "localhost",
