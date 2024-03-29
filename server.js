@@ -1,9 +1,11 @@
 const express = require("express")
 const path = require("path")
-const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken")
 const multer = require("multer")
 const cors = require("cors")
+const dotenv = require("dotenv")
+
+dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT || 4000 
