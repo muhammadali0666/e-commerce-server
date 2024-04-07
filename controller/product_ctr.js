@@ -4,22 +4,27 @@ Product.sync({ force: false });
 
 const addProduct = async (req, res) => {
   const { name, image, category, old_price, new_price } = req.body;
+  if (!name || !image || !category || !old_price || !new_price) {
+    res.json({
+      message: "all datas required",
+    });
+  }
 
   await Product.create({ name, image, category, old_price, new_price });
 
   res.json({
-    success: true,
+    success: "created",
     name: req.body.name,
   });
 };
 
 const getProducts = async (req, res) => {
   try {
-  //   if (req.email.role === "user") {
-  //     return res.send({
-  //       msg: "you are not admin",
-  //     });
-  //   }
+    //   if (req.email.role === "user") {
+    //     return res.send({
+    //       msg: "you are not admin",
+    //     });
+    //   }
 
     // const page = parseInt(req.query.page);
     // const limit = parseInt(req.query.limit);
@@ -105,5 +110,5 @@ const deleteProduct = async (req, res) => {
 module.exports = {
   addProduct,
   getProducts,
-  deleteProduct
+  deleteProduct,
 };
