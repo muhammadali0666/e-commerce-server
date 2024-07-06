@@ -1,36 +1,31 @@
-const { DataTypes, sequelize } = require("../db/config");
-const { UUIDV4 } = require("sequelize");
+const mongoose = require("mongoose");
 
-const Product = sequelize.define("product", {
-  id: {
-    type: DataTypes.TEXT,
-    defaultValue: UUIDV4,
-    primaryKey: true,
-  },
+const productModel = new mongoose.Schema({
   name: {
-    type: DataTypes.TEXT,
-    allowNull: false,
+    type: String,
+    required: true,
   },
   image: {
-    type: DataTypes.TEXT,
-    allowNull: false,
+    type: String,
+    required: true,
   },
   category: {
-    type: DataTypes.TEXT,
-    allowNull: false,
+    type: String,
+    required: true,
   },
   new_price: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+    type: String,
+    required: true,
   },
   old_price: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+    type: String,
+    required: true,
   },
   avilable: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true
+    type: String,
   },
 });
 
-module.exports = Product;
+const Products = mongoose.model("Products", productModel);
+
+module.exports = Products;

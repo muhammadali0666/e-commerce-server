@@ -1,25 +1,21 @@
-const { DataTypes, sequelize } = require("../db/config");
-const { UUIDV4 } = require("sequelize");
+const mongoose = require("mongoose");
 
-const Auth = sequelize.define("auth",{
-  id: {
-    type: DataTypes.TEXT,
-    defaultValue: UUIDV4,
-    primaryKey: true,
-  },
+const Auth = new mongoose.Schema({
   username: {
-    type: DataTypes.TEXT,
-    allowNull: false
+    type: String,
+    required: true,
   },
   email: {
-    type: DataTypes.TEXT,
+    type: String,
+    required: true,
     unique: true,
-    allowNull: false
   },
   password: {
-    type: DataTypes.TEXT,
-  }
+    type: String,
+    required: true,
+  },
 });
 
+const User = mongoose.model("User", Auth);
 
-module.exports = Auth
+module.exports = User;

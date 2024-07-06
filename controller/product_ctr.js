@@ -1,6 +1,4 @@
-const { Product } = require("../Model");
-
-Product.sync({ force: false });
+const { Products } = require("../Model");
 
 const addProduct = async (req, res) => {
   const { name, image, category, old_price, new_price } = req.body;
@@ -10,7 +8,7 @@ const addProduct = async (req, res) => {
     });
   }
 
-  await Product.create({ name, image, category, old_price, new_price });
+  await Products.create({ name, image, category, old_price, new_price });
 
   res.json({
     success: "created",
@@ -29,7 +27,7 @@ const getProducts = async (req, res) => {
     // const page = parseInt(req.query.page);
     // const limit = parseInt(req.query.limit);
 
-    const product = await Product.findAll();
+    const product = await Products.find();
 
     // const startIndex = (page - 1) * limit;
     // const endIndex = page * limit;
@@ -69,12 +67,8 @@ const deleteProduct = async (req, res) => {
 
     // const finder = await Product.findOne({ where: { id: id } });
 
-    await Product.destroy({
-      returning: true,
-      plain: true,
-      where: {
-        id,
-      },
+    await Products.deleteOne({
+     _id: id,
     });
     return res.send({
       msg: "deleted product!",

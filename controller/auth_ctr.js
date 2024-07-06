@@ -1,13 +1,10 @@
-const {Auth} = require("../Model")
+// const {User} = require("../Model")
 
-Auth.sync({force: false})
-
-
-const register = async (req, res) => {
-  res.send("auth")
-}
+// const register = async (req, res) => {
+//   res.send("auth")
+// }
 
 
-module.exports = {
-  register
-}
+// module.exports = {
+//   register
+// }

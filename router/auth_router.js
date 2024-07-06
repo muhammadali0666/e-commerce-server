@@ -1,8 +1,8 @@
-const Router = require("express")
-const {register} = require("../controller/auth_ctr")
+// const Router = require("express")
+// const {register} = require("../controller/auth_ctr")
 
-const authRouter = Router()
+// const authRouter = Router()
 
-authRouter.get("/register", register)
+// authRouter.get("/register", register)
 
-module.exports = authRouter
+// module.exports = authRouter

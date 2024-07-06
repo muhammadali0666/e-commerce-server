@@ -1,24 +1,16 @@
-const { Sequelize, DataTypes } = require("sequelize");
-const dotenv = require("dotenv")
+const mongoose = require("mongoose");
+require("dotenv").config()
 
-dotenv.config()
+async function connectDb() {
+  try {
+     mongoose.connect(process.env.DB_PASSWORD, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }).then(() =>console.log('Ulandi...'))
+     .catch(err => console.log(err))
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 
-const sequelize = new Sequelize({
-  username: "postgres",
-  database: "ecommerce_db",
-  password: process.env.PASSWORD,
-  port: 5432,
-  host: "localhost",
-  dialect: "postgres",
-  logging: false
-});
-
-sequelize
-  .authenticate()
-  .then(() => console.log("Connected"))
-  .catch((err) => console.log(err));
-
-module.exports = {
-  sequelize,
-  DataTypes,
-};
+module.exports = connectDb;

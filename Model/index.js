@@ -1,7 +1,7 @@
-const Auth = require("./auth_model")
-const Product = require("./product_model")
+const User = require("./auth_model")
+const Products = require("./product_model")
 
 module.exports = {
-  Auth,
-  Product
+  User,
+  Products
 }

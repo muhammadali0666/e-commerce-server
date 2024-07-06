@@ -1,11 +1,11 @@
 const express = require("express");
 const path = require("path");
-const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const authRouter = require("./router/auth_router");
+// const authRouter = require("./router/auth_router");
 const productRouter = require("./router/product_model")
+const connectDb = require("./db/config")
 
 dotenv.config();
 
@@ -16,8 +16,10 @@ app.use(express.json());
 app.use(cors());
 
 ///////////////// router
-app.use(authRouter);
+// app.use(authRouter);
+connectDb()
 app.use(productRouter)
+
 
 ///////////////// image storage engine
 
