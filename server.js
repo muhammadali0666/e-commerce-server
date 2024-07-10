@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 // const authRouter = require("./router/auth_router");
 const productRouter = require("./router/product_model")
 const connectDb = require("./db/config")
+const cookieParser = require("cookie-parser");
 
 dotenv.config();
 
@@ -13,7 +14,13 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
 ///////////////// router
 // app.use(authRouter);
