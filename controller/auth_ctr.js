@@ -9,7 +9,7 @@ const register = async (req, res) => {
     const user = await User.findOne({ email: email });
     if (user) {
       return res.status(200).send({
-        msg: "user already exists",
+        message: "user already exists",
       });
     }
     ///////////////////////////// nodemailer
@@ -55,7 +55,7 @@ const register = async (req, res) => {
 
     if (!password.trim()) {
       return res.status(400).send({
-        msg: "Password invalid",
+        message: "Password invalid",
       });
     }
 
@@ -64,7 +64,7 @@ const register = async (req, res) => {
     await User.create({ username, email, password: hash, verify: randomStr });
 
     return res.status(201).send({
-      msg: "Registered!",
+      message: "Registered!",
       email,
     });
   } catch (err) {
@@ -85,7 +85,7 @@ const verifyCode = async (req, res) => {
     }
     if (user.verify !== verify) {
       return res.send({
-        msg: "verify code mistake",
+        message: "verify code mistake",
       });
     }
 
@@ -98,7 +98,7 @@ const verifyCode = async (req, res) => {
         }
       );
       return res.send({
-        msg: "Success",
+        message: "Success",
         token,
       });
     }
@@ -117,7 +117,7 @@ const login = async (req, res) => {
 
     if (!founEmail) {
       return res.status(404).send({
-        msg: "You haven't registered",
+        message: "You haven't registered",
       });
     }
 
@@ -132,12 +132,12 @@ const login = async (req, res) => {
         }
       );
       return res.send({
-        msg: "Success",
+        message: "Success",
         token,
       });
     } else {
       res.send({
-        msg: "Password wrong",
+        message: "Password wrong",
       });
     }
   } catch (err) {
