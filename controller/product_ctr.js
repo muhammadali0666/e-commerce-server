@@ -59,7 +59,7 @@ const getProducts = async (req, res) => {
 const getLatestProduct = async (req, res) => {
   try {
     const latestProdcts = await Products.find()
-    return res.json(latestProdcts.reverse().slice(0,8));
+    return res.json(latestProdcts.reverse().slice(0,10));
   } catch (err) {
     throw new Error(`hndleError:${err}`);
   }
