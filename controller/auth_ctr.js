@@ -78,7 +78,7 @@ const verifyCode = async (req, res) => {
 
     const user = await User.findOne({ email: email });
 
-    if (!user.email) {
+    if (!user) {
       return res.send({
         message: "user not found",
       });
@@ -103,11 +103,50 @@ const verifyCode = async (req, res) => {
       });
     }
   } catch (err) {
-    throw new Error(err)
+    throw new Error(err);
+  }
+};
+
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    let user = await User.findOne({ email: email });
+
+    let founEmail = user.email === email;
+
+    if (!founEmail) {
+      return res.status(404).send({
+        msg: "You haven't registered",
+      });
+    }
+
+    let check = await bcrypt.compare(password, user.password);
+
+    if (check) {
+      let token = await jwt.sign(
+        { id: user.id, email: user.email },
+        process.env.SEKRET_KEY,
+        {
+          expiresIn: process.env.TIME,
+        }
+      );
+      return res.send({
+        msg: "Success",
+        token,
+      });
+    } else {
+      res.send({
+        msg: "Password wrong",
+      });
+    }
+  } catch (err) {
+    throw new Error(err);
   }
 };
 
 module.exports = {
   register,
-  verifyCode
+  verifyCode,
+  login,
 };
