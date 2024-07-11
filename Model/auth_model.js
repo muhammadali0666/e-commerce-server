@@ -16,6 +16,9 @@ const Auth = new mongoose.Schema({
   role: {
     type: String,
     default: "user"
+  },
+  verify: {
+    type: String
   }
 });
 

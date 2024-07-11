@@ -6,7 +6,7 @@ const nodemailer = require("nodemailer");
 const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    const user = await User.findOne({email: email });
+    const user = await User.findOne({ email: email });
     if (user) {
       return res.status(200).send({
         msg: "user already exists",
@@ -72,6 +72,42 @@ const register = async (req, res) => {
   }
 };
 
+const verifyCode = async (req, res) => {
+  try {
+    const { verify, email } = req.body;
+
+    const user = await User.findOne({ email: email });
+
+    if (!user.email) {
+      return res.send({
+        message: "user not found",
+      });
+    }
+    if (user.verify !== verify) {
+      return res.send({
+        msg: "verify code mistake",
+      });
+    }
+
+    if (user.verify === verify) {
+      let token = await jwt.sign(
+        { id: user.id, email: user.email, role: user.role },
+        process.env.SEKRET_KEY,
+        {
+          expiresIn: process.env.TIME,
+        }
+      );
+      return res.send({
+        msg: "Success",
+        token,
+      });
+    }
+  } catch (err) {
+    throw new Error(err)
+  }
+};
+
 module.exports = {
   register,
+  verifyCode
 };
