@@ -3,7 +3,7 @@ const path = require("path");
 const multer = require("multer");
 const cors = require("cors");
 const dotenv = require("dotenv");
-// const authRouter = require("./router/auth_router");
+const authRouter = require("./router/auth_router");
 const productRouter = require("./router/product_model")
 const connectDb = require("./db/config")
 const cookieParser = require("cookie-parser");
@@ -23,7 +23,7 @@ app.use(
 );
 
 ///////////////// router
-// app.use(authRouter);
+app.use(authRouter);
 connectDb()
 app.use(productRouter)
 

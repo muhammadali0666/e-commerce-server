@@ -6,7 +6,7 @@ async function connectDb() {
      mongoose.connect(process.env.DB_PASSWORD, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-    }).then(() =>console.log('Ulandi...'))
+    }).then(() =>console.log('Connected...'))
      .catch(err => console.log(err))
   } catch (error) {
     console.log(error.message)

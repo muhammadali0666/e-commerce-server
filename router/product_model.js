@@ -4,7 +4,7 @@ const {addProduct, getProducts, deleteProduct, getLatestProduct} = require("../c
 const productRouter = Router()
 
 productRouter.post("/add_product", addProduct)
-productRouter.get("/all_product", getProducts)
+productRouter.get("/all_products", getProducts)
 productRouter.get("/latest_products", getLatestProduct)
 productRouter.delete("/delete_product/:id", deleteProduct)
 
