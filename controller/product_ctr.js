@@ -48,11 +48,20 @@ const getProducts = async (req, res) => {
     // }
     // results.results = students.slice(startIndex, endIndex);
 
-    return res.send(product);
+    return res.json(product);
   } catch (err) {
-    return res.send({
+    throw res.json({
       msg: err.message,
     });
+  }
+};
+
+const getLatestProduct = async (req, res) => {
+  try {
+    const latestProdcts = await Products.find()
+    return res.json(latestProdcts.reverse().slice(0,8));
+  } catch (err) {
+    throw new Error(`hndleError:${err}`);
   }
 };
 
@@ -68,13 +77,13 @@ const deleteProduct = async (req, res) => {
     // const finder = await Product.findOne({ where: { id: id } });
 
     await Products.deleteOne({
-     _id: id,
+      _id: id,
     });
-    return res.send({
+    return res.json({
       msg: "deleted product!",
     });
   } catch (err) {
-    return res.send({
+    throw res.json({
       msg: err.message,
     });
   }
@@ -104,5 +113,6 @@ const deleteProduct = async (req, res) => {
 module.exports = {
   addProduct,
   getProducts,
+  getLatestProduct,
   deleteProduct,
 };
