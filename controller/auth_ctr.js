@@ -124,7 +124,7 @@ const login = async (req, res) => {
 
     let check = await bcrypt.compare(password, user.password);
 
-    if (check) {
+    if (check && (user.verified === true)) {
       let token = await jwt.sign(
         { id: user.id, email: user.email },
         process.env.SEKRET_KEY,
@@ -138,7 +138,7 @@ const login = async (req, res) => {
       });
     } else {
       res.send({
-        message: "Password wrong",
+        message: "Password wrong or you are not veriy your code",
       });
     }
   } catch (err) {
