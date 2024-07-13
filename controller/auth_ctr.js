@@ -85,7 +85,7 @@ const verifyCode = async (req, res) => {
     }
     if (user.verify !== verify) {
       return res.send({
-        message: "verify code mistake",
+        message: "verify code mistake or you must be refresh and try again",
       });
     }
 
