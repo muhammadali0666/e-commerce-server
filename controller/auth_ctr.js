@@ -90,6 +90,7 @@ const verifyCode = async (req, res) => {
     }
 
     if (user.verify === verify) {
+      await User.findByIdAndUpdate(user._id,{ verified: true });
       let token = await jwt.sign(
         { id: user.id, email: user.email, role: user.role },
         process.env.SEKRET_KEY,

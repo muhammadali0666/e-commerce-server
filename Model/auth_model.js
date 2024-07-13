@@ -15,11 +15,15 @@ const Auth = new mongoose.Schema({
   },
   role: {
     type: String,
-    default: "user"
+    default: "user",
   },
   verify: {
-    type: String
-  }
+    type: String,
+  },
+  verified: {
+    type: Boolean,
+    default: false
+  },
 });
 
 const User = mongoose.model("User", Auth);
