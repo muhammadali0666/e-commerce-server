@@ -152,18 +152,31 @@ const shoppingCart = async (req, res) => {
     const userId = acceptVariable.id;
 
     const foundedUser = await User.findById(userId);
+    if(!foundedUser){
+      return res.send({
+        message: "User not found"
+      })
+    }
     const foundedProduct = await Products.findById(productId);
+    if(!foundedProduct){
+      return res.send({
+        message: "Product not found"
+      })
+    }
 
     // foundedUser.products.find(async (item) => {
     await foundedUser.products.push({
       productId: productId,
       quantity: +1,
       name: foundedProduct.name,
-      price: foundedProduct.new_price,
+      new_price: foundedProduct.new_price,
+      old_price: foundedProduct.old_price,
+      image: foundedProduct.image,
+      category: foundedProduct.category,
     });
     await foundedUser.save();
     res.json({
-      success: "product added",
+      message: "product added",
     });
     // });
   } catch (err) {

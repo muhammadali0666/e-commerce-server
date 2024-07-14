@@ -32,7 +32,10 @@ const Auth = new mongoose.Schema({
         default: 0,
       },
       name: String,
-      price: String,
+      new_price: String,
+      old_price: String,
+      image: String,
+      category: String,
     },
   ],
 });

@@ -9,6 +9,9 @@ async function requireAuth(req, res, next) {
     }
     try {
       const decoded = jwt.verify(token, process.env.SEKRET_KEY);
+      if(!decoded) {
+        return res.status(403).send("token not active");
+      }
       acceptVariable = decoded;
       // const admin = await Users.findOne({ where: { email: email } });
       // req.isAdmin = admin.rows[0].role;
