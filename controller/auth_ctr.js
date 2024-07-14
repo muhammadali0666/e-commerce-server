@@ -152,19 +152,18 @@ const shoppingCart = async (req, res) => {
     const userId = acceptVariable.id;
 
     const foundedUser = await User.findById(userId);
-    if(!foundedUser){
+    if (!foundedUser) {
       return res.send({
-        message: "User not found"
-      })
+        message: "User not found",
+      });
     }
     const foundedProduct = await Products.findById(productId);
-    if(!foundedProduct){
+    if (!foundedProduct) {
       return res.send({
-        message: "Product not found"
-      })
+        message: "Product not found",
+      });
     }
 
-    // foundedUser.products.find(async (item) => {
     await foundedUser.products.push({
       productId: productId,
       quantity: +1,
@@ -178,7 +177,23 @@ const shoppingCart = async (req, res) => {
     res.json({
       message: "product added",
     });
-    // });
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+const getShoppingCart = async (req, res) => {
+  try {
+    const userId = acceptVariable.id;
+
+    const foundedUser = await User.findById(userId);
+    if (!foundedUser) {
+      return res.send({
+        message: "User not found",
+      });
+    }
+
+    return res.json(foundedUser);
   } catch (err) {
     throw new Error(err);
   }
@@ -189,4 +204,5 @@ module.exports = {
   verifyCode,
   login,
   shoppingCart,
+  getShoppingCart
 };
