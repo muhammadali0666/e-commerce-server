@@ -1,4 +1,4 @@
-const { User } = require("../Model");
+const { User, Products } = require("../Model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
@@ -90,12 +90,12 @@ const verifyCode = async (req, res) => {
     }
 
     if (user.verify === verify) {
-      await User.findByIdAndUpdate(user._id,{ verified: true });
+      await User.findByIdAndUpdate(user._id, { verified: true });
       let token = await jwt.sign(
         { id: user.id, email: user.email, role: user.role },
         process.env.SEKRET_KEY,
         {
-          expiresIn: process.env.TIME,
+          expiresIn: "24h",
         }
       );
       return res.send({
@@ -124,12 +124,12 @@ const login = async (req, res) => {
 
     let check = await bcrypt.compare(password, user.password);
 
-    if (check && (user.verified === true)) {
+    if (check && user.verified === true) {
       let token = await jwt.sign(
         { id: user.id, email: user.email },
         process.env.SEKRET_KEY,
         {
-          expiresIn: process.env.TIME,
+          expiresIn: "24h",
         }
       );
       return res.send({
@@ -146,8 +146,34 @@ const login = async (req, res) => {
   }
 };
 
+const shoppingCart = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const userId = acceptVariable.id;
+
+    const foundedUser = await User.findById(userId);
+    const foundedProduct = await Products.findById(productId);
+
+    // foundedUser.products.find(async (item) => {
+    await foundedUser.products.push({
+      productId: productId,
+      quantity: +1,
+      name: foundedProduct.name,
+      price: foundedProduct.new_price,
+    });
+    await foundedUser.save();
+    res.json({
+      success: "product added",
+    });
+    // });
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 module.exports = {
   register,
   verifyCode,
   login,
+  shoppingCart,
 };

@@ -22,8 +22,19 @@ const Auth = new mongoose.Schema({
   },
   verified: {
     type: Boolean,
-    default: false
+    default: false,
   },
+  products: [
+    {
+      productId: String,
+      quantity: {
+        type: Number,
+        default: 0,
+      },
+      name: String,
+      price: String,
+    },
+  ],
 });
 
 const User = mongoose.model("User", Auth);
