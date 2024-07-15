@@ -4,8 +4,9 @@ const multer = require("multer");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const authRouter = require("./router/auth_router");
-const productRouter = require("./router/product_model")
-const connectDb = require("./db/config")
+const productRouter = require("./router/product_model");
+const cartRouter = require("./router/cart_router");
+const connectDb = require("./db/config");
 const cookieParser = require("cookie-parser");
 
 dotenv.config();
@@ -23,10 +24,10 @@ app.use(
 );
 
 ///////////////// router
+connectDb();
 app.use(authRouter);
-connectDb()
-app.use(productRouter)
-
+app.use(productRouter);
+app.use(cartRouter);
 
 ///////////////// image storage engine
 
@@ -40,16 +41,16 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({storage: storage})
+const upload = multer({ storage: storage });
 
-app.use("/images", express.static("upload/images"))
+app.use("/images", express.static("upload/images"));
 
 app.post("/upload", upload.single("product"), (req, res) => {
   res.json({
     success: 1,
-    image_url: `http://localhost:${PORT}/images/${req.file.filename}`
-  })
-})
+    image_url: `http://localhost:${PORT}/images/${req.file.filename}`,
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`server is running on the ${PORT}`);
