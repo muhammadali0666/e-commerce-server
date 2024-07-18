@@ -7,6 +7,15 @@ const cart = async (req, res) => {
   try {
     let cart = await Cart.findOne({ userId });
 
+    const doubleFounder = cart.products.find((c) => c.productId === productId);
+
+    if (doubleFounder) {
+      return res.json({
+        message:
+          "Click the Add to Cart button to increase the number of products previously added.",
+      });
+    }
+
     const foundedProduct = await Products.findById(productId);
 
     if (!cart) {
@@ -38,8 +47,7 @@ const cart = async (req, res) => {
       message: "product added",
     });
   } catch (error) {
-    console.error("Error adding item to cart:", error);
-    return res.status(500).json({ error: "Something went wrong" });
+    throw new Error(error);
   }
 };
 
