@@ -1,12 +1,13 @@
-const {Cart} = require("../Model");
+const { Cart, User, Products } = require("../Model");
 
 const cart = async (req, res) => {
-  const { productId, quantity, name, price } = req.body;
-  const userId = acceptVariable.id; 
+  const { productId, quantity } = req.body;
+  const userId = acceptVariable.id;
   // TODO: Get the logged-in user's ID
-
   try {
     let cart = await Cart.findOne({ userId });
+
+    const foundedProduct = await Products.findById(productId);
 
     if (!cart) {
       // Create a new cart for the user
@@ -21,17 +22,40 @@ const cart = async (req, res) => {
       cart.products[itemIndex].quantity = quantity;
     } else {
       // Product doesn't exist, add it to the cart
-      cart.products.push({ productId, quantity, name, price });
+      cart.products.push({
+        productId,
+        quantity,
+        name: foundedProduct.name,
+        new_price: foundedProduct.new_price,
+        old_price: foundedProduct.old_price,
+        image: foundedProduct.image,
+        category: foundedProduct.category,
+      });
     }
 
     await cart.save();
-    return res.json(cart);
+    return res.json({
+      message: "product added",
+    });
   } catch (error) {
     console.error("Error adding item to cart:", error);
     return res.status(500).json({ error: "Something went wrong" });
   }
 };
 
+const getCarts = async (req, res) => {
+  try {
+    const carts = await Cart.find();
+    const userId = acceptVariable.id;
+    const foundedUser = await User.findById({ _id: userId });
+    // console.log(foundedUser);
+    return res.json(carts);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
-  cart
-}
+  cart,
+  getCarts,
+};
