@@ -91,11 +91,9 @@ const reduceTheQuantity = async (req, res) => {
 
 const getCarts = async (req, res) => {
   try {
-    const carts = await Cart.find();
     const userId = acceptVariable.id;
-    const foundedUser = await User.findById({ _id: userId });
-    // console.log(foundedUser);
-    return res.json(carts);
+    let productsOfUser = await Cart.findOne({ userId });
+    return res.json(productsOfUser);
   } catch (error) {
     throw new Error(error);
   }
@@ -105,5 +103,5 @@ module.exports = {
   cart,
   getCarts,
   addQuantity,
-  reduceTheQuantity
+  reduceTheQuantity,
 };
