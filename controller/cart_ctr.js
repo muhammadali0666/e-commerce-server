@@ -51,6 +51,44 @@ const cart = async (req, res) => {
   }
 };
 
+const addQuantity = async (req, res) => {
+  try {
+    const { productId } = req.body;
+    const userId = acceptVariable.id;
+    let productsOfUser = await Cart.findOne({ userId });
+    const foundedProduct = productsOfUser.products.find(
+      (c) => c.productId === productId
+    );
+
+    if (foundedProduct) {
+      foundedProduct.quantity += 1;
+    }
+    await productsOfUser.save();
+    return res.json();
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const reduceTheQuantity = async (req, res) => {
+  try {
+    const { productId } = req.body;
+    const userId = acceptVariable.id;
+    let productsOfUser = await Cart.findOne({ userId });
+    const foundedProduct = productsOfUser.products.find(
+      (c) => c.productId === productId
+    );
+
+    if (foundedProduct) {
+      foundedProduct.quantity -= 1;
+    }
+    await productsOfUser.save();
+    return res.json();
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const getCarts = async (req, res) => {
   try {
     const carts = await Cart.find();
@@ -66,4 +104,6 @@ const getCarts = async (req, res) => {
 module.exports = {
   cart,
   getCarts,
+  addQuantity,
+  reduceTheQuantity
 };
