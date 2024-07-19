@@ -32,7 +32,7 @@ const cart = async (req, res) => {
     } else {
       // Product doesn't exist, add it to the cart
       cart.products.push({
-        productId,
+        productId: productId,
         quantity,
         name: foundedProduct.name,
         new_price: foundedProduct.new_price,
