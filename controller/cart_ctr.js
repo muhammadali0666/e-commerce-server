@@ -96,7 +96,7 @@ const getCarts = async (req, res) => {
     let productsOfUser = await Cart.findOne({ userId });
     if (!productsOfUser) {
       return res.json({
-        message: "Product not found"
+        message: "Product not found",
       });
     }
     return res.json(productsOfUser);
@@ -105,26 +105,26 @@ const getCarts = async (req, res) => {
   }
 };
 
-// const deleteCart = async (req, res) => {
-//   try {
-//     const { productId } = req.body;
-//     const userId = acceptVariable.id;
-//     let productsOfUser = await Cart.findOne({ userId });
-//     const foundedProduct = productsOfUser.products.find(
-//       (c) => c.productId === productId
-//     );
-//     console.log(foundedProduct);
-//     await Cart.findOneAndDelete({foundedProduct})
-//     return
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// };
+const deleteCart = async (req, res) => {
+  try {
+    const { productId } = req.body;
+    const userId = acceptVariable.id;
+    let productsOfUser = await Cart.findOne({ userId });
+    const foundedProduct = productsOfUser.products.findIndex(
+      (c) => c.productId === productId
+    );
+    productsOfUser.products.splice(foundedProduct, 1);
+    await productsOfUser.save();
+    return res.json({ message: "Product removed from cart successfully" });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 module.exports = {
   cart,
   getCarts,
   addQuantity,
   reduceTheQuantity,
-  // deleteCart,
+  deleteCart,
 };
