@@ -65,7 +65,75 @@ const getMenProducts = async (req, res, next) => {
 
     const products = await Products.find();
 
-    const product = products.filter((item) => item.category == "men")
+    const product = products.filter((item) => item.category == "men");
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const results = {};
+
+    if (endIndex < product.length) {
+      results.next = {
+        page: page + 1,
+        limit: limit,
+      };
+    }
+    if (startIndex > 0) {
+      results.prev = {
+        page: page - 1,
+        limit: limit,
+      };
+    }
+    results.results = product.slice(startIndex, endIndex);
+
+    return res.json(results);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getWomenProducts = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+
+    const products = await Products.find();
+
+    const product = products.filter((item) => item.category == "women");
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const results = {};
+
+    if (endIndex < product.length) {
+      results.next = {
+        page: page + 1,
+        limit: limit,
+      };
+    }
+    if (startIndex > 0) {
+      results.prev = {
+        page: page - 1,
+        limit: limit,
+      };
+    }
+    results.results = product.slice(startIndex, endIndex);
+
+    return res.json(results);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getKidsProducts = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+
+    const products = await Products.find();
+
+    const product = products.filter((item) => item.category == "kid");
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
@@ -119,7 +187,7 @@ const deleteProduct = async (req, res, next) => {
       msg: "deleted product!",
     });
   } catch (err) {
-    next(err)
+    next(err);
   }
 };
 
@@ -148,6 +216,8 @@ module.exports = {
   addProduct,
   getProducts,
   getMenProducts,
+  getWomenProducts,
+  getKidsProducts,
   getLatestProduct,
   deleteProduct,
 };
