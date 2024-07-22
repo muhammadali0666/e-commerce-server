@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
     const user = await User.findOne({ email: email });
@@ -68,11 +68,11 @@ const register = async (req, res) => {
       email,
     });
   } catch (err) {
-    throw new Error(err);
+    next(err);
   }
 };
 
-const verifyCode = async (req, res) => {
+const verifyCode = async (req, res, next) => {
   try {
     const { verify, email } = req.body;
 
@@ -104,11 +104,11 @@ const verifyCode = async (req, res) => {
       });
     }
   } catch (err) {
-    throw new Error(err);
+    next(err);
   }
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -142,7 +142,7 @@ const login = async (req, res) => {
       });
     }
   } catch (err) {
-    throw new Error(err);
+    next(err);
   }
 };
 

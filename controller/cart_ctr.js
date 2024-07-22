@@ -1,6 +1,6 @@
 const { Cart, User, Products } = require("../Model");
 
-const cart = async (req, res) => {
+const cart = async (req, res, next) => {
   const { productId, quantity } = req.body;
   const userId = acceptVariable.id;
   // TODO: Get the logged-in user's ID
@@ -47,11 +47,11 @@ const cart = async (req, res) => {
       message: "product added",
     });
   } catch (error) {
-    throw new Error(error);
+    next(error);
   }
 };
 
-const addQuantity = async (req, res) => {
+const addQuantity = async (req, res, next) => {
   try {
     const { productId } = req.body;
     const userId = acceptVariable.id;
@@ -66,12 +66,11 @@ const addQuantity = async (req, res) => {
     await productsOfUser.save();
     return res.json();
   } catch (error) {
-    console.log(error);
-    throw new Error(error);
+    next(error);
   }
 };
 
-const reduceTheQuantity = async (req, res) => {
+const reduceTheQuantity = async (req, res, next) => {
   try {
     const { productId } = req.body;
     const userId = acceptVariable.id;
@@ -86,11 +85,11 @@ const reduceTheQuantity = async (req, res) => {
     await productsOfUser.save();
     return res.json();
   } catch (error) {
-    throw new Error(error);
+    next(error);
   }
 };
 
-const getCarts = async (req, res) => {
+const getCarts = async (req, res, next) => {
   try {
     const userId = acceptVariable.id;
     let productsOfUser = await Cart.findOne({ userId });
@@ -101,11 +100,11 @@ const getCarts = async (req, res) => {
     }
     return res.json(productsOfUser);
   } catch (error) {
-    throw new Error(error);
+    next(error);
   }
 };
 
-const deleteCart = async (req, res) => {
+const deleteCart = async (req, res, next) => {
   try {
     const { productId } = req.body;
     const userId = acceptVariable.id;
@@ -117,7 +116,7 @@ const deleteCart = async (req, res) => {
     await productsOfUser.save();
     return res.json({ message: "Product removed from cart successfully" });
   } catch (error) {
-    throw new Error(error);
+    next(error);
   }
 };
 

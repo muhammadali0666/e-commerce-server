@@ -1,22 +1,26 @@
 const { Products } = require("../Model");
 
-const addProduct = async (req, res) => {
-  const { name, image, category, old_price, new_price } = req.body;
-  if (!name || !image || !category || !old_price || !new_price) {
+const addProduct = async (req, res, next) => {
+  try {
+    const { name, image, category, old_price, new_price } = req.body;
+    if (!name || !image || !category || !old_price || !new_price) {
+      res.json({
+        message: "all datas required",
+      });
+    }
+
+    await Products.create({ name, image, category, old_price, new_price });
+
     res.json({
-      message: "all datas required",
+      success: "created",
+      name: req.body.name,
     });
+  } catch (err) {
+    next(err);
   }
-
-  await Products.create({ name, image, category, old_price, new_price });
-
-  res.json({
-    success: "created",
-    name: req.body.name,
-  });
 };
 
-const getProducts = async (req, res) => {
+const getProducts = async (req, res, next) => {
   try {
     //   if (req.email.role === "user") {
     //     return res.send({
@@ -50,22 +54,54 @@ const getProducts = async (req, res) => {
 
     return res.json(product);
   } catch (err) {
-    throw res.json({
-      msg: err.message,
-    });
+    next(err);
   }
 };
 
-const getLatestProduct = async (req, res) => {
+const getMenProducts = async (req, res, next) => {
   try {
-    const latestProdcts = await Products.find()
-    return res.json(latestProdcts.reverse().slice(0,10));
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+
+    const products = await Products.find();
+
+    const product = products.filter((item) => item.category == "men")
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const results = {};
+
+    if (endIndex < product.length) {
+      results.next = {
+        page: page + 1,
+        limit: limit,
+      };
+    }
+    if (startIndex > 0) {
+      results.prev = {
+        page: page - 1,
+        limit: limit,
+      };
+    }
+    results.results = product.slice(startIndex, endIndex);
+
+    return res.json(results);
   } catch (err) {
-    throw new Error(`hndleError:${err}`);
+    next(err);
   }
 };
 
-const deleteProduct = async (req, res) => {
+const getLatestProduct = async (req, res, next) => {
+  try {
+    const latestProdcts = await Products.find();
+    return res.json(latestProdcts.reverse().slice(0, 10));
+  } catch (err) {
+    next(err);
+  }
+};
+
+const deleteProduct = async (req, res, next) => {
   try {
     // if (req.email.role === "user") {
     //   return res.send({
@@ -83,9 +119,7 @@ const deleteProduct = async (req, res) => {
       msg: "deleted product!",
     });
   } catch (err) {
-    throw res.json({
-      msg: err.message,
-    });
+    next(err)
   }
 };
 
@@ -113,6 +147,7 @@ const deleteProduct = async (req, res) => {
 module.exports = {
   addProduct,
   getProducts,
+  getMenProducts,
   getLatestProduct,
   deleteProduct,
 };
