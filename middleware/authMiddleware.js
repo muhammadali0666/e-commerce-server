@@ -1,26 +1,24 @@
 const jwt = require("jsonwebtoken");
 
-async function requireAuth(req, res, next) {
+async function requireAdmin(req, res, next) {
   try {
     const token = req.headers.token;
     if (!token) {
-      return res
-        .status(403)
-        .send({ message: "A token is required for authentication" });
+      throw BaseError.BadRequest("A token is required for authentication")
     }
     try {
       const decoded = jwt.verify(token, process.env.SEKRET_KEY);
       if (!decoded) {
-        return res.status(403).send({ message: "token not active" });
+        throw BaseError.BadRequest("Token not active")
       }
       acceptVariable = decoded;
-    } catch (err) {
-      return res.status(401).send({ message: "Invalid token and try login or register again" });
+    } catch (error) {
+      throw BaseError.BadRequest("Invalid token and try login or register again")
     }
     next();
-  } catch (err) {
-    return res.sendStatus(401);
+  } catch (error) {
+    next(error)
   }
 }
 
-module.exports = requireAuth;
+module.exports = requireAdmin;

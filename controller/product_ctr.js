@@ -4,9 +4,7 @@ const addProduct = async (req, res, next) => {
   try {
     const { name, image, category, old_price, new_price } = req.body;
     if (!name || !image || !category || !old_price || !new_price) {
-      res.json({
-        message: "all datas required",
-      });
+      throw BaseError.BadRequest("All datas required")
     }
 
     await Products.create({ name, image, category, old_price, new_price });
@@ -15,8 +13,8 @@ const addProduct = async (req, res, next) => {
       success: "created",
       name: req.body.name,
     });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -53,8 +51,8 @@ const getProducts = async (req, res, next) => {
     // results.results = students.slice(startIndex, endIndex);
 
     return res.json(product);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -87,8 +85,8 @@ const getMenProducts = async (req, res, next) => {
     results.results = product.slice(startIndex, endIndex);
 
     return res.json(results);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -121,8 +119,8 @@ const getWomenProducts = async (req, res, next) => {
     results.results = product.slice(startIndex, endIndex);
 
     return res.json(results);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -155,8 +153,8 @@ const getKidsProducts = async (req, res, next) => {
     results.results = product.slice(startIndex, endIndex);
 
     return res.json(results);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -164,8 +162,8 @@ const getLatestProduct = async (req, res, next) => {
   try {
     const latestProdcts = await Products.find();
     return res.json(latestProdcts.reverse().slice(0, 10));
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -186,8 +184,8 @@ const deleteProduct = async (req, res, next) => {
     return res.json({
       msg: "deleted product!",
     });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 

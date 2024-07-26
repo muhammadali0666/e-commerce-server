@@ -8,6 +8,7 @@ const productRouter = require("./router/product_model");
 const cartRouter = require("./router/cart_router");
 const connectDb = require("./db/config");
 const cookieParser = require("cookie-parser");
+const errorMiddleware = require("./middleware/error.middleware");
 
 dotenv.config();
 
@@ -51,6 +52,8 @@ app.post("/upload", upload.single("product"), (req, res) => {
     image_url: `http://localhost:${PORT}/images/${req.file.filename}`,
   });
 });
+
+app.use(errorMiddleware)
 
 app.listen(PORT, () => {
   console.log(`server is running on the ${PORT}`);

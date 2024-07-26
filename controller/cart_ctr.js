@@ -1,4 +1,5 @@
-const { Cart, User, Products } = require("../Model");
+const BaseError = require("../error/base.error");
+const { Cart, Products } = require("../Model");
 
 const cart = async (req, res, next) => {
   const { productId, quantity } = req.body;
@@ -10,10 +11,7 @@ const cart = async (req, res, next) => {
     const doubleFounder = cart?.products.find((c) => c.productId === productId);
 
     if (doubleFounder) {
-      return res.json({
-        message:
-          "Click the Add to Cart button to increase the number of products previously added.",
-      });
+      throw BaseError.BadRequest("Click the Add to Cart button to increase the number of products previously added.")
     }
 
     const foundedProduct = await Products.findById(productId);
@@ -94,9 +92,7 @@ const getCarts = async (req, res, next) => {
     const userId = acceptVariable.id;
     let productsOfUser = await Cart.findOne({ userId });
     if (!productsOfUser) {
-      return res.json({
-        message: "Product not found",
-      });
+      throw BaseError.BadRequest("Product not found")
     }
     return res.json(productsOfUser);
   } catch (error) {
