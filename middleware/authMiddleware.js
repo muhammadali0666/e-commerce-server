@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const BaseError = require("../error/base.error");
 
 async function requireAdmin(req, res, next) {
   try {

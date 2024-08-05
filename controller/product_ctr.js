@@ -189,27 +189,6 @@ const deleteProduct = async (req, res, next) => {
   }
 };
 
-// const getFullInfoStudent = async (req, res) => {
-//   try {
-//     if (req.email.role === "user") {
-//       return res.send({
-//         msg: "you are not admin",
-//       });
-//     }
-//     const { id } = req.params;
-
-//     const result = await Groups.findOne({ where: { id: id } });
-//     const student = await Students.findAll({
-//       where: { science: result.GroupYonalish },
-//     });
-//     return res.json(student);
-//   } catch (err) {
-//     return res.status(400).send({
-//       msg: err.message,
-//     });
-//   }
-// };
-
 module.exports = {
   addProduct,
   getProducts,

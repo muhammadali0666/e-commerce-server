@@ -16,7 +16,7 @@ const register = async (req, res, next) => {
       service: "gmail",
       auth: {
         user: "muhammadalishuhratjonov50@gmail.com",
-        pass: "gmlmvvatzkuedfqe",
+        pass: "siit jlcb gpnj povm",
       },
     });
 
@@ -105,12 +105,16 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    let user = await User.findOne({ email: email });
-
+    let user = await User.findOne({ email: email })
+    
+    if (!user) {
+      throw BaseError.BadRequest("Unauthorized")
+    }
     let founEmail = user.email === email;
 
+
     if (!founEmail) {
-      throw BaseError.BadRequest("You haven't registered")
+      throw BaseError.BadRequest("Unauthorized")
     }
 
     let check = await bcrypt.compare(password, user.password);
