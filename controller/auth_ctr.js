@@ -9,7 +9,7 @@ const register = async (req, res, next) => {
     const { username, email, password } = req.body;
     const user = await User.findOne({ email: email });
     if (user) {
-      throw BaseError.BadRequest("User already exists")
+      throw BaseError.BadRequest("User already exists");
     }
     ///////////////////////////// nodemailer
     let transporter = nodemailer.createTransport({
@@ -53,7 +53,7 @@ const register = async (req, res, next) => {
     /////////////////////////////
 
     if (!password.trim()) {
-      throw BaseError.BadRequest("Password invalid")
+      throw BaseError.BadRequest("Password invalid");
     }
 
     let hash = await bcrypt.hash(password, 12);
@@ -76,10 +76,12 @@ const verifyCode = async (req, res, next) => {
     const user = await User.findOne({ email: email });
 
     if (!user) {
-      throw BaseError.BadRequest("User not found")
+      throw BaseError.BadRequest("User not found");
     }
     if (user.verify !== verify) {
-      throw BaseError.BadRequest("Verify code mistake or you must be refresh and try again")
+      throw BaseError.BadRequest(
+        "Verify code mistake or you must be refresh and try again"
+      );
     }
 
     if (user.verify === verify) {
@@ -105,16 +107,15 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    let user = await User.findOne({ email: email })
-    
+    let user = await User.findOne({ email: email });
+
     if (!user) {
-      throw BaseError.BadRequest("Unauthorized")
+      throw BaseError.BadRequest("Unauthorized");
     }
     let founEmail = user.email === email;
 
-
     if (!founEmail) {
-      throw BaseError.BadRequest("Unauthorized")
+      throw BaseError.BadRequest("Unauthorized");
     }
 
     let check = await bcrypt.compare(password, user.password);
@@ -132,70 +133,17 @@ const login = async (req, res, next) => {
         token,
       });
     } else {
-      throw BaseError.BadRequest("Password wrong or you are not veriy your code")
+      throw BaseError.BadRequest(
+        "Password wrong or you are not veriy your code"
+      );
     }
   } catch (error) {
     next(error);
   }
 };
 
-// const shoppingCart = async (req, res) => {
-//   try {
-//     const productId = req.params.id;
-//     const userId = acceptVariable.id;
-
-//     const foundedUser = await User.findById(userId);
-//     if (!foundedUser) {
-//       return res.send({
-//         message: "User not found",
-//       });
-//     }
-//     const foundedProduct = await Products.findById(productId);
-//     if (!foundedProduct) {
-//       return res.send({
-//         message: "Product not found",
-//       });
-//     }
-
-//     await foundedUser.products.push({
-//       productId: productId,
-//       quantity: +1,
-//       name: foundedProduct.name,
-//       new_price: foundedProduct.new_price,
-//       old_price: foundedProduct.old_price,
-//       image: foundedProduct.image,
-//       category: foundedProduct.category,
-//     });
-//     await foundedUser.save();
-//     res.json({
-//       message: "product added",
-//     });
-//   } catch (err) {
-//     throw new Error(err);
-//   }
-// };
-
-// const getShoppingCart = async (req, res) => {
-//   try {
-//     const userId = acceptVariable.id;
-
-//     const foundedUser = await User.findById(userId);
-//     if (!foundedUser) {
-//       return res.send({
-//         message: "User not found",
-//       });
-//     }
-
-//     return res.json(foundedUser);
-//   } catch (err) {
-//     throw new Error(err);
-//   }
-// };
-
 module.exports = {
   register,
   verifyCode,
   login,
-  // shoppingCart,
-  // getShoppingCart
 };
